@@ -13,7 +13,8 @@ class AuthController extends Controller
     {
         //validate fields
         $attrs = $request->validate([
-            'name' => 'required|string',
+            'name' => 'required|string|unique:users,name',
+            'fullname' => 'required|string|unique:users,fullname',
             'email' => 'required|email|unique:users,email',
             'password' => 'required|min:6|confirmed'
         ]);
@@ -22,6 +23,7 @@ class AuthController extends Controller
         //create user
         $user = User::create([
             'name' => $attrs['name'],
+            'fullname' => $attrs['fullname'],
             'email' => $attrs['email'],
             'image' => $image,
             'password' => bcrypt($attrs['password'])
@@ -44,8 +46,7 @@ class AuthController extends Controller
         ]);
 
         // attempt login
-        if(!Auth::attempt($attrs))
-        {
+        if (!Auth::attempt($attrs)) {
             return response([
                 'message' => 'Invalid credentials.'
             ], 403);
@@ -94,5 +95,4 @@ class AuthController extends Controller
             'user' => auth()->user()
         ], 200);
     }
-
 }

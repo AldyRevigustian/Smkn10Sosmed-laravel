@@ -9,16 +9,28 @@ use App\Models\Post;
 class PostController extends Controller
 {
     // get all posts
-    public function index()
+    public function index(Request $request)
     {
+        $query = Post::orderBy('created_at', 'desc')->with('user:id,name,image')->withCount('comments', 'likes') ->with('likes', function($like){
+            return $like->where('user_id', auth()->user()->id)
+                ->select('id', 'user_id', 'post_id')->get();
+        });
+
+
+        $perPage = 5;
+        $page = $request->input('page', 1);
+        $total = $query->count();
+        $result = $query->offset(($page - 1) * $perPage)->limit($perPage)->get();
+
         return response([
-            'posts' => Post::orderBy('created_at', 'desc')->with('user:id,name,image')->withCount('comments', 'likes')
-            ->with('likes', function($like){
-                return $like->where('user_id', auth()->user()->id)
-                    ->select('id', 'user_id', 'post_id')->get();
-            })
-            ->get()
+            'posts' => $result,
+            'total' => $total,
+            'page' => $page,
+            'last_page' => ceil($total / $perPage)
         ], 200);
+
+
+
     }
 
     // get single post

@@ -13,8 +13,7 @@ class LikeController extends Controller
     {
         $post = Post::find($id);
 
-        if(!$post)
-        {
+        if (!$post) {
             return response([
                 'message' => 'Post not found.'
             ], 403);
@@ -23,8 +22,7 @@ class LikeController extends Controller
         $like = $post->likes()->where('user_id', auth()->user()->id)->first();
 
         // if not liked then like
-        if(!$like)
-        {
+        if (!$like) {
             Like::create([
                 'post_id' => $id,
                 'user_id' => auth()->user()->id
@@ -39,6 +37,34 @@ class LikeController extends Controller
 
         return response([
             'message' => 'Disliked'
+        ], 200);
+    }
+
+    public function like($id)
+    {
+        $post = Post::find($id);
+
+        if (!$post) {
+            return response([
+                'message' => 'Post not found.'
+            ], 403);
+        }
+
+        $like = $post->likes()->where('user_id', auth()->user()->id)->first();
+
+        if (!$like) {
+            Like::create([
+                'post_id' => $id,
+                'user_id' => auth()->user()->id
+            ]);
+
+            return response([
+                'message' => 'Liked'
+            ], 200);
+        }
+
+        return response([
+            'message' => 'Liked'
         ], 200);
     }
 }

@@ -45,4 +45,5 @@ Route::group(['middleware' => ['auth:sanctum']], function() {
 
     // Like
     Route::post('/posts/{id}/likes', [LikeController::class, 'likeOrUnlike']); // like or dislike back a post
+    Route::post('/posts/{id}/likesOnly', [LikeController::class, 'like']); // like or dislike back a post
 });

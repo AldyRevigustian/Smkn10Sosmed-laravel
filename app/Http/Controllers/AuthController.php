@@ -76,6 +76,16 @@ class AuthController extends Controller
         ], 200);
     }
 
+    public function userId(Request $request)
+    {
+        $userId = $request->id;
+
+        $user = User::where('id', $userId)->get();
+        return response([
+            'user' => $user
+        ], 200);
+    }
+
     // update user
     public function update(Request $request)
     {

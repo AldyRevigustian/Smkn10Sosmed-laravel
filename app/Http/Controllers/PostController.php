@@ -63,6 +63,29 @@ class PostController extends Controller
         ], 200);
     }
 
+    public function storeVideo(Request $request)
+    {
+        //validate fields
+        $attrs = $request->validate([
+            'body' => 'required|string'
+        ]);
+
+        $video = $this->saveVideo($request->video, 'posts');
+
+        $post = Post::create([
+            'user_id' => auth()->user()->id,
+            'body' => $attrs['body'],
+            'image' => $video
+        ]);
+
+        // for now skip for post image
+
+        return response([
+            'message' => 'Post created.',
+            'post' => $post,
+        ], 200);
+    }
+
     // update a post
     public function update(Request $request, $id)
     {

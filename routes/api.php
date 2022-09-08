@@ -6,6 +6,9 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\LikeController;
+use App\Http\Controllers\SearchController;
+use App\Http\Controllers\StoryController;
+use App\Http\Controllers\VideoController;
 
 /*
 |--------------------------------------------------------------------------
@@ -28,6 +31,7 @@ Route::group(['middleware' => ['auth:sanctum']], function() {
     Route::put('/user', [AuthController::class, 'update']);
     Route::put('/user/noimage', [AuthController::class, 'updateNoImage']);
     Route::post('/logout', [AuthController::class, 'logout']);
+    Route::post('/userId', [AuthController::class, 'userId']);
 
     // Post
     Route::get('/posts', [PostController::class, 'index']); // all posts
@@ -45,5 +49,18 @@ Route::group(['middleware' => ['auth:sanctum']], function() {
 
     // Like
     Route::post('/posts/{id}/likes', [LikeController::class, 'likeOrUnlike']); // like or dislike back a post
-    Route::post('/posts/{id}/likesOnly', [LikeController::class, 'like']); // like or dislike back a post
+    Route::post('/posts/{id}/likesOnly', [LikeController::class, 'like']); // like or dislike back a post4
+
+    // Search
+    Route::post('/search', [SearchController::class, 'index']);
+
+    // Post Video
+    Route::post('/posts/video', [PostController::class, 'storeVideo']);
+
+    // Stories
+    Route::get('/stories', [StoryController::class, 'index']); // all posts
+    Route::post('/storiesImage', [StoryController::class, 'indexImage']); // all posts
+    Route::post('/stories', [StoryController::class, 'store']); // create post
+
+
 });

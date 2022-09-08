@@ -27,4 +27,13 @@ class Controller extends BaseController
         // Url is the base url exp: localhost:8000
         return '/storage/' . $path . '/' . $filename;
     }
+
+    public function saveVideo($video, $path = 'public')
+    {
+        if (!$video) {
+            return null;
+        }
+        $up = Storage::disk('public')->put('posts/videos', $video);
+        return "/storage/" . $up;
+    }
 }

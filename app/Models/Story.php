@@ -11,6 +11,7 @@ class Story extends Model
 
     protected $fillable = [
         'user_id',
+        'updated_at',
     ];
 
 
@@ -22,6 +23,10 @@ class Story extends Model
     public function imageStory()
     {
         return $this->hasMany(ImageStory::class, 'user_id','user_id');
+    }
+
+    public function view(){
+        return $this->hasMany(View::class);
     }
 
 }

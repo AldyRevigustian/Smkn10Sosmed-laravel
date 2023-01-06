@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\ImageStory;
 use App\Models\Story;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Date;
 
 class StoryController extends Controller
 {
@@ -21,7 +22,10 @@ class StoryController extends Controller
         // dd($images);
 
         return response([
-            'stories' => Story::orderBy('created_at', 'desc')->with('user:id,name,image')->get()
+            'stories' => Story::orderBy('created_at', 'desc')->with('user:id,name,image')->with('view', function($view){
+                return $view->where('user_id', auth()->user()->id)
+                    ->select('id', 'user_id', 'story_id')->get();
+            })->get()
         ], 200);
     }
 
@@ -63,6 +67,10 @@ class StoryController extends Controller
             Story::create([
                 'user_id' => auth()->user()->id,
                 // 'image_id' => $saveImage->id
+            ]);
+        }else {
+            $cek->update([
+                'updated_at' => Date::now()->format('Y-m-d H:i:s'),
             ]);
         }
 

@@ -9,6 +9,10 @@ use App\Http\Controllers\LikeController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\StoryController;
 use App\Http\Controllers\VideoController;
+use App\Http\Controllers\ViewController;
+use App\Models\Story;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\Date;
 
 /*
 |--------------------------------------------------------------------------
@@ -51,6 +55,7 @@ Route::group(['middleware' => ['auth:sanctum']], function() {
     Route::post('/posts/{id}/likes', [LikeController::class, 'likeOrUnlike']); // like or dislike back a post
     Route::post('/posts/{id}/likesOnly', [LikeController::class, 'like']); // like or dislike back a post4
 
+    Route::post('/story/{id}/viewed ', [ViewController::class, 'store']); // like or dislike back a post
     // Search
     Route::post('/search', [SearchController::class, 'index']);
 
@@ -62,5 +67,10 @@ Route::group(['middleware' => ['auth:sanctum']], function() {
     Route::post('/storiesImage', [StoryController::class, 'indexImage']); // all posts
     Route::post('/stories', [StoryController::class, 'store']); // create post
 
+    Route::get('/cek', function(){
+        $cek =  Story::where('created_at', '<=', Date::now()->format('Y-m-d H:i:s'))->get();
 
+        // dd(Date::now()->format('Y-m-d H:i:s') >= "2022-09-09 07:55:21");
+        dd($cek);
+    }); // all posts
 });
